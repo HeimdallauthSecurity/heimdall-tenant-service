@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 public class TenantCreateRequestDTO {
+    private String accountId;
     private String tenantName;
     private TenantContactInformation contactInformation;
     private TenantStatus status;

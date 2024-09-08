@@ -1,5 +1,7 @@
 package com.heimdallauth.tenantservice.utils;
 
+import java.util.UUID;
+
 public class ResourceIdentifier {
     private static final String IDENTIFIER_PREFIX = "hrn";
     private static final String DELIMITER = "::";
@@ -21,6 +23,9 @@ public class ResourceIdentifier {
         this.resourceId = resourceId;
     }
 
+    public static ResourceIdentifier buildResourceIdentifier(String accountId, String deploymentRegion, UUID tenantUUID) {
+        return ResourceIdentifier.fromString(String.format("hrn::heimdall::tenants::%s::%s/%s",deploymentRegion, accountId, tenantUUID.toString()));
+    }
     public static ResourceIdentifier fromString(String identifier) {
         if (!identifier.startsWith(IDENTIFIER_PREFIX + DELIMITER)) {
             throw new IllegalArgumentException("Invalid identifier format");
