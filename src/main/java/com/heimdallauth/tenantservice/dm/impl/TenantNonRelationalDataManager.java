@@ -26,7 +26,6 @@ public class TenantNonRelationalDataManager implements TenantDataManager {
     @Value("${heimdall.deployment.region}")
     private String deploymentRegion;
     private final MongoTemplate mongoTemplate;
-    private final ModelMapper modelMapper;
     private static final String TENANT_COLLECTION = "tenants-collection";
     private static final String AUTHENTICATION_SETTINGS_COLLECTION = "authentication-settings-collection";
     private static final String USER_MANAGEMENT_SETTINGS_COLLECTION = "user-management-settings-collection";
@@ -35,9 +34,8 @@ public class TenantNonRelationalDataManager implements TenantDataManager {
 
 
     @Autowired
-    public TenantNonRelationalDataManager(MongoTemplate mongoTemplate, ModelMapper modelMapper) {
+    public TenantNonRelationalDataManager(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
-        this.modelMapper = modelMapper;
     }
 
     @Override
