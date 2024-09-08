@@ -36,7 +36,7 @@ public class TenantNonRelationalDataManager implements TenantDataManager {
     public TenantInformationDTO onboardNewTenant(ResourceIdentifier tenantId,String accountId, String tenantName, TenantContactInformation contactInformation) {
         UUID tenantUUID = UUID.randomUUID();
         TenantDocument tenantDocument = TenantDocument.builder()
-                .id(tenantId)
+                .id(tenantId.toString())
                 .tenantName(tenantName)
                 .tenantDescription("Tenant for " + tenantName)
                 .contactInformation(contactInformation)

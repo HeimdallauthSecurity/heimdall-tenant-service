@@ -19,7 +19,7 @@ import java.time.Instant;
 @Data
 public class TenantDocument {
     @Id
-    private ResourceIdentifier id;
+    private String id;
     private String tenantName;
     private String tenantDescription;
     private TenantContactInformation contactInformation;

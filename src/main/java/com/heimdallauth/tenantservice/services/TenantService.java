@@ -24,7 +24,7 @@ public class TenantService {
     }
     public TenantInformationDTO onboardTenantInformation(TenantCreateRequestDTO createRequestDTO){
         log.info("Onboarding tenant information for tenant: {}", createRequestDTO.getTenantName());
-        ResourceIdentifier identifier = ResourceIdentifier.buildResourceIdentifier(createRequestDTO.getAccountId(), deploymentRegion, UUID.randomUUID());
+        ResourceIdentifier identifier = ResourceIdentifier.buildTenantIdResourceIdentifier(createRequestDTO.getAccountId(), deploymentRegion);
         return tenantDataManager.onboardNewTenant(identifier, createRequestDTO.getAccountId(), createRequestDTO.getTenantName(), createRequestDTO.getContactInformation());
     }
 }
