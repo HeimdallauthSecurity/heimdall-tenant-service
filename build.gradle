@@ -54,3 +54,9 @@ dependencyManagement {
 tasks.named('test') {
     useJUnitPlatform()
 }
+tasks.named('bootJar'){
+    archiveFileName='tenant-service.jar'
+}
+tasks.named('jar'){
+    enabled=false
+}
