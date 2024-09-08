@@ -36,7 +36,7 @@ jobs:
       - name: Upload JAR as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: kratos-backend
+          name: tenant-service
           path: build/libs/tenant-service.jar
 
       - name: Setup QEMU
