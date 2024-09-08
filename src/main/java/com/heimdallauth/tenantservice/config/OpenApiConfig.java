@@ -11,8 +11,8 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Credential Store API")
+                        .title("Tenant Service API")
                         .version("1.0")
-                        .description("API for managing credentials in HeimdallAuth"));
+                        .description("API for managing Tenants in HeimdallAuth"));
     }
 }
