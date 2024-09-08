@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class TenantCreateRequestDTO {
     private String accountId;
     private String tenantName;

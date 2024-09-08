@@ -66,3 +66,6 @@ tasks.named('bootJar'){
 tasks.named('jar'){
     enabled=false
 }
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:deprecation"
+}
