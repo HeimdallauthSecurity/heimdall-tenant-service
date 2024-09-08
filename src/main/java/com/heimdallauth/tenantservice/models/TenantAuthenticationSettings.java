@@ -1,6 +1,12 @@
 package com.heimdallauth.tenantservice.models;
 
-public record TenantAuthenticationSettings(
+import com.heimdallauth.tenantservice.constants.AuthenticationMethods;
 
+import java.util.List;
+
+public record TenantAuthenticationSettings(
+        List<AuthenticationMethods> authMethods,
+        Boolean mfaEnabled,
+        PasswordPolicy passwordPolicy
 ) {
 }
