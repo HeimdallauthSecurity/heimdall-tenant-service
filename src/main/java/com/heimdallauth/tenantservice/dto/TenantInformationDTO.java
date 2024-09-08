@@ -24,4 +24,5 @@ public class TenantInformationDTO {
     private TenantUsageLimits usageLimits;
     private WebhookSettings webhookSettings;
     private SecuritySettings securitySettings;
+    private NotificationSettings notificationSettings;
 }
