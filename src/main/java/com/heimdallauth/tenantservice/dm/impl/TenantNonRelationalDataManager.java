@@ -2,10 +2,14 @@ package com.heimdallauth.tenantservice.dm.impl;
 
 import com.heimdallauth.tenantservice.constants.AuthenticationMethods;
 import com.heimdallauth.tenantservice.constants.ResourceType;
+import com.heimdallauth.tenantservice.constants.UserCreationMode;
 import com.heimdallauth.tenantservice.dm.TenantDataManager;
 import com.heimdallauth.tenantservice.documents.TenantAuthenticationSettingsDocument;
 import com.heimdallauth.tenantservice.documents.TenantDocument;
+import com.heimdallauth.tenantservice.documents.TenantNotificationSettingDocument;
+import com.heimdallauth.tenantservice.documents.UserManagementSettingsDocument;
 import com.heimdallauth.tenantservice.dto.TenantInformationDTO;
+import com.heimdallauth.tenantservice.models.NotificationSettings;
 import com.heimdallauth.tenantservice.models.PasswordPolicy;
 import com.heimdallauth.tenantservice.models.TenantContactInformation;
 import com.heimdallauth.tenantservice.utils.ResourceIdentifier;
@@ -38,7 +42,7 @@ public class TenantNonRelationalDataManager implements TenantDataManager {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public TenantInformationDTO onboardNewTenant(ResourceIdentifier tenantId,String accountId, String tenantName, TenantContactInformation contactInformation, String tenantDescription) {
+    public TenantInformationDTO onboardNewTenant(ResourceIdentifier tenantId,String accountId, String tenantName, TenantContactInformation contactInformation, String tenantDescription, List<UserCreationMode> userCreationModes) {
         TenantDocument tenantDocument = TenantDocument.builder()
                 .id(tenantId.toString())
                 .tenantName(tenantName)
@@ -52,8 +56,21 @@ public class TenantNonRelationalDataManager implements TenantDataManager {
                 .mfaEnabled(false)
                 .passwordPolicy(new PasswordPolicy(8, 128, true, true, true, true, 5,90))
                 .build();
+        TenantNotificationSettingDocument tenantNotificationSettingDocument = TenantNotificationSettingDocument.builder()
+                .tenantId(tenantId.toString())
+                .id(ResourceIdentifier.buildChildIdentifiersFromTenantIdentifier(tenantId.toString(), ResourceType.NOTIFICATION_SETTINGS).toString())
+                .notificationSettings(new NotificationSettings(true, false))
+                .build();
+        UserManagementSettingsDocument userManagementSettingsDocument = UserManagementSettingsDocument.builder()
+                .tenantId(tenantId.toString())
+                .id(ResourceIdentifier.buildChildIdentifiersFromTenantIdentifier(tenantId.toString(),ResourceType.USER_MANAGEMENT_SETTINGS).toString())
+                .userLimit(1000)
+                .userCreationModes(userCreationModes)
+                .build();
         this.mongoTemplate.save(tenantDocument, TENANT_COLLECTION);
         this.mongoTemplate.save(tenantAuthenticationSettingsDocument, AUTHENTICATION_SETTINGS_COLLECTION);
+        this.mongoTemplate.save(tenantNotificationSettingDocument, SECURITY_SETTINGS_COLLECTION);
+        this.mongoTemplate.save(userManagementSettingsDocument, USER_MANAGEMENT_SETTINGS_COLLECTION);
         return new TenantInformationDTO();
     }
 

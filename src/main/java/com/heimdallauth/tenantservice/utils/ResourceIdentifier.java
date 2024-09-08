@@ -3,37 +3,23 @@ package com.heimdallauth.tenantservice.utils;
 import com.heimdallauth.tenantservice.constants.ResourceType;
 import lombok.Getter;
 
-import java.net.ResponseCache;
 import java.util.UUID;
 
-@Getter
-public class ResourceIdentifier {
+public record ResourceIdentifier(String service, String region, String accountId, String resourceType,
+                                 @Getter String resourceId) {
     private static final String IDENTIFIER_PREFIX = "hrn";
     private static final String PARTITION = "heimdallauth";
     private static final String SERVICE = "tenant-service";
     private static final String DELIMITER = "::";
     private static final String RESOURCE_DELIMITER = "/";
 
-    private final String service;
-    private final String region;
-    private final String accountId;
-    private final String resourceType;
-    private final String resourceId;
-
-    public ResourceIdentifier(String service, String region, String accountId, String resourceType, String resourceId) {
-        this.service = service;
-        this.region = region;
-        this.accountId = accountId;
-        this.resourceType = resourceType;
-        this.resourceId = resourceId;
-    }
-
     public static ResourceIdentifier buildTenantIdResourceIdentifier(String accountId, String region) {
         return new ResourceIdentifier("tenant-service", region, accountId, ResourceType.TENANT.toString(), UUID.randomUUID().toString());
     }
+
     public static ResourceIdentifier buildChildIdentifiersFromTenantIdentifier(String tenantResourceIdentifier, ResourceType childResourceRequested) {
         ResourceIdentifier parentResourceIdentifier = ResourceIdentifier.fromString(tenantResourceIdentifier);
-        return new ResourceIdentifier(parentResourceIdentifier.service, parentResourceIdentifier.region, parentResourceIdentifier.resourceId, childResourceRequested.toString(), UUID.randomUUID().toString());
+        return new ResourceIdentifier(parentResourceIdentifier.service, parentResourceIdentifier.region, parentResourceIdentifier.accountId, childResourceRequested.toString(), parentResourceIdentifier.resourceId);
     }
 
     public static ResourceIdentifier fromString(String identifier) {
