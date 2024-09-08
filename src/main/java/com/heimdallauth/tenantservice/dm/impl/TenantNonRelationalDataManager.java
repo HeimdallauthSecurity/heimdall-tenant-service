@@ -33,12 +33,11 @@ public class TenantNonRelationalDataManager implements TenantDataManager {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public TenantInformationDTO onboardNewTenant(ResourceIdentifier tenantId,String accountId, String tenantName, TenantContactInformation contactInformation) {
-        UUID tenantUUID = UUID.randomUUID();
+    public TenantInformationDTO onboardNewTenant(ResourceIdentifier tenantId,String accountId, String tenantName, TenantContactInformation contactInformation, String tenantDescription) {
         TenantDocument tenantDocument = TenantDocument.builder()
                 .id(tenantId.toString())
                 .tenantName(tenantName)
-                .tenantDescription("Tenant for " + tenantName)
+                .tenantDescription(tenantDescription)
                 .contactInformation(contactInformation)
                 .build();
         this.mongoTemplate.save(tenantDocument, TENANT_COLLECTION);

@@ -13,7 +13,6 @@ import lombok.*;
 public class TenantCreateRequestDTO {
     private String accountId;
     private String tenantName;
+    private String tenantDescription;
     private TenantContactInformation contactInformation;
-    private TenantStatus status;
-    private UserManagementSettings userManagementSettings;
 }

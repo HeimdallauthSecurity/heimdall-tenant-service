@@ -7,7 +7,7 @@ import com.heimdallauth.tenantservice.utils.ResourceIdentifier;
 import java.util.Optional;
 
 public interface TenantDataManager {
-    TenantInformationDTO onboardNewTenant(ResourceIdentifier tenantId,String accountId, String tenantName, TenantContactInformation contactInformation);
+    TenantInformationDTO onboardNewTenant(ResourceIdentifier tenantId,String accountId, String tenantName, TenantContactInformation contactInformation, String tenantDescription);
     Optional<TenantInformationDTO> fetchTenantInformation(ResourceIdentifier tenantId);
     Optional<TenantInformationDTO> updateTenantInformation(ResourceIdentifier tenantId, TenantInformationDTO updatedTenantInformation);
     void deleteTenantIfPresent(ResourceIdentifier tenantId);
