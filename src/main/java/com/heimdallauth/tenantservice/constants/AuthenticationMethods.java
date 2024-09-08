@@ -1,7 +1,7 @@
 package com.heimdallauth.tenantservice.constants;
 
 public enum AuthenticationMethods {
-    OAuth2,
-    OpenIDConnect,
+    OAUTH_2,
+    OPEN_ID_CONNECT,
     PASSKEY
 }
