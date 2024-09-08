@@ -19,9 +19,9 @@ import java.util.List;
 @Data
 public class UserManagementSettingsDocument {
     @Id
-    private ResourceIdentifier id;
+    private String id;
     @Indexed(unique = true)
-    private ResourceIdentifier tenantId;
+    private String tenantId;
     private List<UserCreationMode> userCreationModes;
     private List<String> defaultRoles;
     private int userLimit;

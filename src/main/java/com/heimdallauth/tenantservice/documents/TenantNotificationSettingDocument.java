@@ -17,8 +17,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class TenantNotificationSettingDocument {
     @Id
-    private ResourceIdentifier id;
+    private String id;
     @Indexed(unique = true)
-    private ResourceIdentifier tenantId;
+    private String tenantId;
     private NotificationSettings notificationSettings;
 }

@@ -1,8 +1,12 @@
 package com.heimdallauth.tenantservice.dm.impl;
 
+import com.heimdallauth.tenantservice.constants.AuthenticationMethods;
+import com.heimdallauth.tenantservice.constants.ResourceType;
 import com.heimdallauth.tenantservice.dm.TenantDataManager;
+import com.heimdallauth.tenantservice.documents.TenantAuthenticationSettingsDocument;
 import com.heimdallauth.tenantservice.documents.TenantDocument;
 import com.heimdallauth.tenantservice.dto.TenantInformationDTO;
+import com.heimdallauth.tenantservice.models.PasswordPolicy;
 import com.heimdallauth.tenantservice.models.TenantContactInformation;
 import com.heimdallauth.tenantservice.utils.ResourceIdentifier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,7 +45,15 @@ public class TenantNonRelationalDataManager implements TenantDataManager {
                 .tenantDescription(tenantDescription)
                 .contactInformation(contactInformation)
                 .build();
+        TenantAuthenticationSettingsDocument tenantAuthenticationSettingsDocument = TenantAuthenticationSettingsDocument.builder()
+                .tenantId(tenantId.toString())
+                .id(ResourceIdentifier.buildChildIdentifiersFromTenantIdentifier(tenantId.toString(), ResourceType.AUTHENTICATION_SETTINGS).toString())
+                .authenticationMethods(List.of(AuthenticationMethods.OAUTH_2, AuthenticationMethods.OPEN_ID_CONNECT, AuthenticationMethods.PASSKEY))
+                .mfaEnabled(false)
+                .passwordPolicy(new PasswordPolicy(8, 128, true, true, true, true, 5,90))
+                .build();
         this.mongoTemplate.save(tenantDocument, TENANT_COLLECTION);
+        this.mongoTemplate.save(tenantAuthenticationSettingsDocument, AUTHENTICATION_SETTINGS_COLLECTION);
         return new TenantInformationDTO();
     }
 

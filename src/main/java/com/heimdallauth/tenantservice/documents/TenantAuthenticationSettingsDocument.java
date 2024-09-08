@@ -20,9 +20,9 @@ import java.util.List;
 @Data
 public class TenantAuthenticationSettingsDocument {
     @Id
-    private ResourceIdentifier id;
+    private String id;
     @Indexed(unique = true)
-    private ResourceIdentifier tenantId;
+    private String tenantId;
     private List<AuthenticationMethods> authenticationMethods;
     private Boolean mfaEnabled;
     private PasswordPolicy passwordPolicy;
