@@ -9,10 +9,9 @@ import com.heimdallauth.tenantservice.documents.TenantDocument;
 import com.heimdallauth.tenantservice.documents.TenantNotificationSettingDocument;
 import com.heimdallauth.tenantservice.documents.UserManagementSettingsDocument;
 import com.heimdallauth.tenantservice.dto.TenantInformationDTO;
-import com.heimdallauth.tenantservice.models.NotificationSettings;
-import com.heimdallauth.tenantservice.models.PasswordPolicy;
-import com.heimdallauth.tenantservice.models.TenantContactInformation;
+import com.heimdallauth.tenantservice.models.*;
 import com.heimdallauth.tenantservice.utils.ResourceIdentifier;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -21,13 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 public class TenantNonRelationalDataManager implements TenantDataManager {
     @Value("${heimdall.deployment.region}")
     private String deploymentRegion;
     private final MongoTemplate mongoTemplate;
+    private final ModelMapper modelMapper;
     private static final String TENANT_COLLECTION = "tenants-collection";
     private static final String AUTHENTICATION_SETTINGS_COLLECTION = "authentication-settings-collection";
     private static final String USER_MANAGEMENT_SETTINGS_COLLECTION = "user-management-settings-collection";
@@ -36,8 +35,9 @@ public class TenantNonRelationalDataManager implements TenantDataManager {
 
 
     @Autowired
-    public TenantNonRelationalDataManager(MongoTemplate mongoTemplate) {
+    public TenantNonRelationalDataManager(MongoTemplate mongoTemplate, ModelMapper modelMapper) {
         this.mongoTemplate = mongoTemplate;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -67,11 +67,18 @@ public class TenantNonRelationalDataManager implements TenantDataManager {
                 .userLimit(1000)
                 .userCreationModes(userCreationModes)
                 .build();
-        this.mongoTemplate.save(tenantDocument, TENANT_COLLECTION);
-        this.mongoTemplate.save(tenantAuthenticationSettingsDocument, AUTHENTICATION_SETTINGS_COLLECTION);
-        this.mongoTemplate.save(tenantNotificationSettingDocument, SECURITY_SETTINGS_COLLECTION);
-        this.mongoTemplate.save(userManagementSettingsDocument, USER_MANAGEMENT_SETTINGS_COLLECTION);
-        return new TenantInformationDTO();
+        TenantDocument savedTenantDocument = this.mongoTemplate.save(tenantDocument, TENANT_COLLECTION);
+        TenantAuthenticationSettingsDocument savedTenantAuthenticationSettingsDocument = this.mongoTemplate.save(tenantAuthenticationSettingsDocument, AUTHENTICATION_SETTINGS_COLLECTION);
+        TenantNotificationSettingDocument savedTenantNotificationSettings = this.mongoTemplate.save(tenantNotificationSettingDocument, SECURITY_SETTINGS_COLLECTION);
+        UserManagementSettingsDocument savedUserManagementSettings = this.mongoTemplate.save(userManagementSettingsDocument, USER_MANAGEMENT_SETTINGS_COLLECTION);
+        return TenantInformationDTO.builder()
+                .tenantId(savedTenantDocument.getId())
+                .tenantName(savedTenantDocument.getTenantName())
+                .contactInformation(savedTenantDocument.getContactInformation())
+                .authenticationSettings(TenantAuthenticationSettings.fromEntity(savedTenantAuthenticationSettingsDocument))
+                .notificationSettings(NotificationSettings.fromEntity(savedTenantNotificationSettings))
+                .userManagementSettings(UserManagementSettings.fromEntity(savedUserManagementSettings))
+                .build();
     }
 
     @Override
