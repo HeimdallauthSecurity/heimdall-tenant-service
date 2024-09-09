@@ -117,6 +117,6 @@ public class TenantNonRelationalDataManager implements TenantDataManager {
     }
     @Override
     public void deleteTenantIfPresent(ResourceIdentifier tenantId) {
-
+        throw new UnsupportedOperationException("The operation is not supported as of now");
     }
 }

@@ -15,10 +15,11 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 @Slf4j
 public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
+    private static final String KEY_LOG_ID = "logId";
     @ExceptionHandler(TenantNotFoundException.class)
     public ResponseEntity<ErrorDTO> handleTenantNotFoundException(TenantNotFoundException e, WebRequest request){
         String logId = UUID.randomUUID().toString();
-        MDC.put("logId", logId);
+        MDC.put(KEY_LOG_ID, logId);
         log.error("Requested tenant not found, requestData {}, endpoint: {}",e.tenantResourceName,request.getContextPath());
         MDC.clear();
         return ResponseEntity.status(404).body(new ErrorDTO(logId, "Requested tenant not found", e.getMessage()));
@@ -26,7 +27,7 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidTenantDataException.class)
     public ResponseEntity<ErrorDTO> handleInvalidTenantDataException(InvalidTenantDataException ex, WebRequest request){
         String logId = UUID.randomUUID().toString();
-        MDC.put("logId", logId);
+        MDC.put(KEY_LOG_ID, logId);
         log.error("Invalid tenant data endpoint: {}",request.getContextPath());
         return ResponseEntity.status(400).body(new ErrorDTO(logId, "Invalid tenant data", ex.getMessage()));
     }
@@ -35,7 +36,7 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
         String logId = UUID.randomUUID().toString();
         StackTraceElement[] stackTrace = ex.getStackTrace();
         String logMessageStackTrace = Arrays.stream(stackTrace).map(StackTraceElement::toString).collect(Collectors.joining(" | "));
-        MDC.put("logId", logId);
+        MDC.put(KEY_LOG_ID, logId);
         MDC.put("StackTrace", logMessageStackTrace);
         log.error("Internal server error, endpoint: {}",request.getContextPath());
         MDC.clear();
