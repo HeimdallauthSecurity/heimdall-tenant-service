@@ -4,6 +4,7 @@ import com.heimdallauth.tenantservice.dm.AccountsDataManager;
 import com.heimdallauth.tenantservice.documents.AccountDocument;
 import com.heimdallauth.tenantservice.dto.AccountCreationRequestDTO;
 import com.heimdallauth.tenantservice.dto.AccountInformationDTO;
+import com.heimdallauth.tenantservice.exceptions.AccountNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class AccountService {
     }
 
     public AccountInformationDTO getAccountInformation(String accountId){
-        AccountDocument accountDocument = this.accountsDataManager.findAccountByAccountId(accountId);
+        AccountDocument accountDocument = this.accountsDataManager.findAccountByAccountId(accountId).orElseThrow(() -> new AccountNotFoundException("Account could not be located", accountId));
         return new AccountInformationDTO(
                 accountDocument.getAccountId(),
                 accountDocument.getAccountAdminEmailAddress(),
@@ -40,11 +41,11 @@ public class AccountService {
         );
     }
     public Boolean validateAccountId(String accountId){
-        return this.accountsDataManager.findAccountByAccountId(accountId) != null;
+        return this.accountsDataManager.findAccountByAccountId(accountId).isPresent();
     }
 
     public AccountInformationDTO validateAccountEmailAddress(String accountId){
-        AccountDocument accountDocument = this.accountsDataManager.findAccountByAccountId(accountId);
+        AccountDocument accountDocument = this.accountsDataManager.findAccountByAccountId(accountId).orElseThrow(() -> new AccountNotFoundException("Account could not be located", accountId));
         accountDocument.setVerificationTimestamp(Instant.now());
         this.accountsDataManager.updateAccount(accountId, accountDocument);
         return new AccountInformationDTO(

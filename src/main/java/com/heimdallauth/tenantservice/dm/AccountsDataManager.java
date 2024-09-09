@@ -3,9 +3,12 @@ package com.heimdallauth.tenantservice.dm;
 import com.heimdallauth.tenantservice.documents.AccountDocument;
 import com.heimdallauth.tenantservice.models.TenantContactInformation;
 
+import java.util.Optional;
+
 public interface AccountsDataManager {
     AccountDocument createAccount(String accountEmailAddress, String organizationName, String requesterFullName);
-    AccountDocument findAccountByAccountId(String accountId);
+    Optional<AccountDocument> findAccountByAccountId(String accountId);
     AccountDocument updateAccount(String accountId, AccountDocument updatedContactInformation);
+    Optional<AccountDocument> findAccountByAccountAdminEmailAddress(String accountAdminEmailAddress);
     void deleteAccountByAccountId(String accountId);
 }
