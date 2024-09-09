@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.Instant;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,5 +18,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class AccountDocument {
     @Id
     private String accountId;
-    private TenantContactInformation contactInformation;
+    private String accountAdminEmailAddress;
+    private String organizationName;
+    private String requesterFullName;
+    private Instant creationTimestamp;
+    private Instant updateTimestamp;
+    private Instant verificationTimestamp;
 }

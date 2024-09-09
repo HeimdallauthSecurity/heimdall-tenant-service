@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+
 @Component
 public class AccountsNonRelationalDataManager implements AccountsDataManager {
     private final MongoTemplate mongoTemplate;
@@ -19,12 +21,10 @@ public class AccountsNonRelationalDataManager implements AccountsDataManager {
         this.mongoTemplate = mongoTemplate;
     }
 
+
     @Override
-    public AccountDocument createAccount(TenantContactInformation contactInformation) {
-        AccountDocument accountDocument= AccountDocument.builder()
-                .contactInformation(contactInformation)
-                .build();
-       return this.mongoTemplate.save(accountDocument, ACCOUNTS_COLLECTION);
+    public AccountDocument createAccount(String accountEmailAddress, String organizationName, String requesterFullName) {
+        return null;
     }
 
     @Override
@@ -34,8 +34,9 @@ public class AccountsNonRelationalDataManager implements AccountsDataManager {
     }
 
     @Override
-    public AccountDocument updateAccount(String accountId, TenantContactInformation updatedContactInformation) {
-        return null;
+    public AccountDocument updateAccount(String accountId, AccountDocument updatedAccountDocument) {
+        updatedAccountDocument.setUpdateTimestamp(Instant.now());
+        return this.mongoTemplate.save(updatedAccountDocument);
     }
 
     @Override
