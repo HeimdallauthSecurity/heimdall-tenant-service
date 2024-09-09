@@ -2,7 +2,6 @@ package com.heimdallauth.tenantservice.documents;
 
 import com.heimdallauth.tenantservice.constants.TenantStatus;
 import com.heimdallauth.tenantservice.models.TenantContactInformation;
-import com.heimdallauth.tenantservice.utils.ResourceIdentifier;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

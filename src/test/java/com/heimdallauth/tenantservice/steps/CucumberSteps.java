@@ -1,7 +1,7 @@
 package com.heimdallauth.tenantservice.steps;
 
-import com.heimdallauth.tenantservice.config.TestDependencyConfiguration;
 import com.heimdallauth.tenantservice.config.TestContainerConfig;
+import com.heimdallauth.tenantservice.config.TestDependencyConfiguration;
 import com.heimdallauth.tenantservice.dto.AccountCreationRequestDTO;
 import com.heimdallauth.tenantservice.dto.TenantCreateRequestDTO;
 import com.heimdallauth.tenantservice.dto.TenantInformationDTO;
@@ -19,8 +19,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @CucumberContextConfiguration
@@ -40,13 +40,13 @@ public class CucumberSteps {
     @Given("an account with valid contact information")
     public void anAccountWithValidContactInformation() {
         requestDTO = new AccountCreationRequestDTO();
-        requestDTO.setAccountContactInformation(new TenantContactInformation("abc@google.com","123456789","support@google.com"));
+        requestDTO.setAccountContactInformation(new TenantContactInformation("abc@google.com", "123456789", "support@google.com"));
     }
 
     @Given("an account with invalid contact information")
     public void anAccountWithInvalidContactInformation() {
         requestDTO = new AccountCreationRequestDTO();
-        requestDTO.setAccountContactInformation(new TenantContactInformation(null, null,null));
+        requestDTO.setAccountContactInformation(new TenantContactInformation(null, null, null));
     }
 
     @When("I create the account")
@@ -62,7 +62,7 @@ public class CucumberSteps {
     @Then("the account should be created successfully")
     public void theAccountShouldBeCreatedSuccessfully() {
         String accountId = response.getBody();
-        assertNotNull(accountId,"Account ID should not be null");
+        assertNotNull(accountId, "Account ID should not be null");
     }
 
     @Then("the account creation should fail")

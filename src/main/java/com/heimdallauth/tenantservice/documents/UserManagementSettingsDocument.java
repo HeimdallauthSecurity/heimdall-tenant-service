@@ -1,7 +1,6 @@
 package com.heimdallauth.tenantservice.documents;
 
 import com.heimdallauth.tenantservice.constants.UserCreationMode;
-import com.heimdallauth.tenantservice.utils.ResourceIdentifier;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

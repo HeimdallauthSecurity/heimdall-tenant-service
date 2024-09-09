@@ -2,7 +2,6 @@ package com.heimdallauth.tenantservice.documents;
 
 import com.heimdallauth.tenantservice.constants.AuthenticationMethods;
 import com.heimdallauth.tenantservice.models.PasswordPolicy;
-import com.heimdallauth.tenantservice.utils.ResourceIdentifier;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

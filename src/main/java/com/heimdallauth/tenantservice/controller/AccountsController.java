@@ -29,7 +29,7 @@ public class AccountsController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping("/create")
-    public ResponseEntity<String> createNewAccount(@RequestBody AccountCreationRequestDTO accountCreationRequestDTO){
+    public ResponseEntity<String> createNewAccount(@RequestBody AccountCreationRequestDTO accountCreationRequestDTO) {
         return ResponseEntity.ok(this.accountService.createNewAccount(accountCreationRequestDTO));
     }
 }

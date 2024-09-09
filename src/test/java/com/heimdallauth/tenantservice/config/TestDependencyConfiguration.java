@@ -20,29 +20,34 @@ public class TestDependencyConfiguration {
         this.mongoDBContainer = mongoDBContainer;
     }
 
-   @Bean
+    @Bean
     public MongoTemplate mongoTemplate() {
-       String mongoUri = mongoDBContainer.getReplicaSetUrl();
-       return new MongoTemplate(new SimpleMongoClientDatabaseFactory(mongoUri));
-   }
-   @Bean
+        String mongoUri = mongoDBContainer.getReplicaSetUrl();
+        return new MongoTemplate(new SimpleMongoClientDatabaseFactory(mongoUri));
+    }
+
+    @Bean
     public AccountsNonRelationalDataManager accountsNonRelationalDataManager(MongoTemplate mongoTemplate) {
         return new AccountsNonRelationalDataManager(mongoTemplate);
     }
+
     @Bean
     public AccountsDataManager accountsDataManager(AccountsNonRelationalDataManager accountsNonRelationalDataManager) {
         return accountsNonRelationalDataManager;
     }
+
     @Bean
     public AccountService accountService(AccountsDataManager accountsDataManager) {
         return new AccountService(accountsDataManager);
     }
+
     @Bean
-    public TenantDataManager tenantDataManager(MongoTemplate mongoTemplate){
+    public TenantDataManager tenantDataManager(MongoTemplate mongoTemplate) {
         return new TenantNonRelationalDataManager(mongoTemplate);
     }
+
     @Bean
-    public TenantService tenantService(TenantDataManager tenantDataManager, AccountService accountService){
+    public TenantService tenantService(TenantDataManager tenantDataManager, AccountService accountService) {
         return new TenantService(tenantDataManager, accountService);
     }
 }

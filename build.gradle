@@ -60,11 +60,11 @@ dependencyManagement {
 tasks.named('test') {
     useJUnitPlatform()
 }
-tasks.named('bootJar'){
-    archiveFileName='tenant-service.jar'
+tasks.named('bootJar') {
+    archiveFileName = 'tenant-service.jar'
 }
-tasks.named('jar'){
-    enabled=false
+tasks.named('jar') {
+    enabled = false
 }
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:deprecation"

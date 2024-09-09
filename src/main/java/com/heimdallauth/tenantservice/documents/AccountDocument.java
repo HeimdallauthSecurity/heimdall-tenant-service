@@ -1,6 +1,5 @@
 package com.heimdallauth.tenantservice.documents;
 
-import com.heimdallauth.tenantservice.models.TenantContactInformation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
