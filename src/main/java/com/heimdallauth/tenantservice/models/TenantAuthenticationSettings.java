@@ -10,7 +10,7 @@ public record TenantAuthenticationSettings(
         Boolean mfaEnabled,
         PasswordPolicy passwordPolicy
 ) {
-    public static TenantAuthenticationSettings fromEntity(TenantAuthenticationSettingsDocument authenticationSettingsDocument){
+    public static TenantAuthenticationSettings fromEntity(TenantAuthenticationSettingsDocument authenticationSettingsDocument) {
         return new TenantAuthenticationSettings(
                 authenticationSettingsDocument.getAuthenticationMethods(),
                 authenticationSettingsDocument.getMfaEnabled(),

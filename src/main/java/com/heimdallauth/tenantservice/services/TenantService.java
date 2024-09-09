@@ -10,25 +10,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 @Slf4j
 public class TenantService {
-    @Value("${heimdall.deployment.region}")
-    private String deploymentRegion;
     private final TenantDataManager tenantDataManager;
     private final AccountService accountService;
+    @Value("${heimdall.deployment.region}")
+    private String deploymentRegion;
 
     @Autowired
     public TenantService(TenantDataManager tenantDataManager, AccountService accountService) {
         this.tenantDataManager = tenantDataManager;
         this.accountService = accountService;
     }
-    public TenantInformationDTO onboardTenantInformation(TenantCreateRequestDTO createRequestDTO){
+
+    public TenantInformationDTO onboardTenantInformation(TenantCreateRequestDTO createRequestDTO) {
         log.info("Onboarding tenant information for tenant: {}", createRequestDTO.getTenantName());
         boolean proceed = this.accountService.validateAccountId(createRequestDTO.getAccountId());
-        if(proceed){
+        if (proceed) {
             ResourceIdentifier identifier = ResourceIdentifier.buildTenantIdResourceIdentifier(createRequestDTO.getAccountId(), deploymentRegion, createRequestDTO.getTenantName());
             return tenantDataManager.onboardNewTenant(identifier, createRequestDTO.getAccountId(), createRequestDTO.getTenantName(), createRequestDTO.getContactInformation(), createRequestDTO.getTenantDescription(), createRequestDTO.getUserRegistrationModes());
         }

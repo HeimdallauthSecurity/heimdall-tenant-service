@@ -3,8 +3,6 @@ package com.heimdallauth.tenantservice.utils;
 import com.heimdallauth.tenantservice.constants.ResourceType;
 import lombok.Getter;
 
-import java.util.UUID;
-
 public record ResourceIdentifier(String service, String region, String accountId, String resourceType,
                                  @Getter String resourceId) {
     private static final String IDENTIFIER_PREFIX = "hrn";

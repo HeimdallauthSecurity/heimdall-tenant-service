@@ -2,7 +2,6 @@ package com.heimdallauth.tenantservice.dm.impl;
 
 import com.heimdallauth.tenantservice.dm.AccountsDataManager;
 import com.heimdallauth.tenantservice.documents.AccountDocument;
-import com.heimdallauth.tenantservice.models.TenantContactInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -14,8 +13,8 @@ import java.util.Optional;
 
 @Component
 public class AccountsNonRelationalDataManager implements AccountsDataManager {
-    private final MongoTemplate mongoTemplate;
     private static final String ACCOUNTS_COLLECTION = "accounts-collection";
+    private final MongoTemplate mongoTemplate;
 
     @Autowired
     public AccountsNonRelationalDataManager(MongoTemplate mongoTemplate) {
@@ -55,13 +54,15 @@ public class AccountsNonRelationalDataManager implements AccountsDataManager {
 
     @Override
     public void deleteAccountByAccountId(String accountId) {
-       Query selectionQuery = Query.query(Criteria.where("accountId").is(accountId));
-       executeSelectAndDelete(selectionQuery);
+        Query selectionQuery = Query.query(Criteria.where("accountId").is(accountId));
+        executeSelectAndDelete(selectionQuery);
     }
-    private Optional<AccountDocument> executeDatabaseQuery(Query selectionQuery){
+
+    private Optional<AccountDocument> executeDatabaseQuery(Query selectionQuery) {
         return this.mongoTemplate.find(selectionQuery, AccountDocument.class, ACCOUNTS_COLLECTION).stream().findFirst();
     }
-    private void executeSelectAndDelete(Query selectionQuery){
+
+    private void executeSelectAndDelete(Query selectionQuery) {
         this.mongoTemplate.findAndRemove(selectionQuery, AccountDocument.class, ACCOUNTS_COLLECTION);
     }
 }

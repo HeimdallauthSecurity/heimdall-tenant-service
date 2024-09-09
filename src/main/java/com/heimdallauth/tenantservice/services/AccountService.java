@@ -21,7 +21,8 @@ public class AccountService {
     public AccountService(AccountsDataManager accountsDataManager) {
         this.accountsDataManager = accountsDataManager;
     }
-    public String createNewAccount(AccountCreationRequestDTO accountCreatePayload){
+
+    public String createNewAccount(AccountCreationRequestDTO accountCreatePayload) {
         AccountDocument accountDocument = this.accountsDataManager.createAccount(
                 accountCreatePayload.requesterEmailAddress(),
                 accountCreatePayload.organizationName(),
@@ -30,7 +31,7 @@ public class AccountService {
         return accountDocument.getAccountId();
     }
 
-    public AccountInformationDTO getAccountInformation(String accountId){
+    public AccountInformationDTO getAccountInformation(String accountId) {
         AccountDocument accountDocument = this.accountsDataManager.findAccountByAccountId(accountId).orElseThrow(() -> new AccountNotFoundException("Account could not be located", accountId));
         return new AccountInformationDTO(
                 accountDocument.getAccountId(),
@@ -40,11 +41,12 @@ public class AccountService {
                 accountDocument.getUpdateTimestamp()
         );
     }
-    public Boolean validateAccountId(String accountId){
+
+    public Boolean validateAccountId(String accountId) {
         return this.accountsDataManager.findAccountByAccountId(accountId).isPresent();
     }
 
-    public AccountInformationDTO validateAccountEmailAddress(String accountId){
+    public AccountInformationDTO validateAccountEmailAddress(String accountId) {
         AccountDocument accountDocument = this.accountsDataManager.findAccountByAccountId(accountId).orElseThrow(() -> new AccountNotFoundException("Account could not be located", accountId));
         accountDocument.setVerificationTimestamp(Instant.now());
         this.accountsDataManager.updateAccount(accountId, accountDocument);
