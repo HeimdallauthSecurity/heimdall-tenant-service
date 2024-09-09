@@ -42,7 +42,7 @@ public class TestDependencyConfiguration {
         return new TenantNonRelationalDataManager(mongoTemplate);
     }
     @Bean
-    public TenantService tenantService(TenantDataManager tenantDataManager){
-        return new TenantService(tenantDataManager);
+    public TenantService tenantService(TenantDataManager tenantDataManager, AccountService accountService){
+        return new TenantService(tenantDataManager, accountService);
     }
 }
