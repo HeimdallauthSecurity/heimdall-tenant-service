@@ -29,7 +29,7 @@ public class TenantService {
         log.info("Onboarding tenant information for tenant: {}", createRequestDTO.getTenantName());
         boolean proceed = this.accountService.validateAccountId(createRequestDTO.getAccountId());
         if(proceed){
-            ResourceIdentifier identifier = ResourceIdentifier.buildTenantIdResourceIdentifier(createRequestDTO.getAccountId(), deploymentRegion);
+            ResourceIdentifier identifier = ResourceIdentifier.buildTenantIdResourceIdentifier(createRequestDTO.getAccountId(), deploymentRegion, createRequestDTO.getTenantName());
             return tenantDataManager.onboardNewTenant(identifier, createRequestDTO.getAccountId(), createRequestDTO.getTenantName(), createRequestDTO.getContactInformation(), createRequestDTO.getTenantDescription(), createRequestDTO.getUserRegistrationModes());
         }
         throw new InvalidTenantDataException("The account number to associate tenant to is invalid");

@@ -13,8 +13,8 @@ public record ResourceIdentifier(String service, String region, String accountId
     private static final String DELIMITER = "::";
     private static final String RESOURCE_DELIMITER = "/";
 
-    public static ResourceIdentifier buildTenantIdResourceIdentifier(String accountId, String region) {
-        return new ResourceIdentifier("tenant-service", region, accountId, ResourceType.TENANT.toString(), UUID.randomUUID().toString());
+    public static ResourceIdentifier buildTenantIdResourceIdentifier(String accountId, String region, String tenantName) {
+        return new ResourceIdentifier("tenant-service", region, accountId, ResourceType.TENANT.toString(), tenantName);
     }
 
     public static ResourceIdentifier buildChildIdentifiersFromTenantIdentifier(String tenantResourceIdentifier, ResourceType childResourceRequested) {
