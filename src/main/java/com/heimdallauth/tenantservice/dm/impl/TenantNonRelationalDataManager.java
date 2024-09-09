@@ -30,6 +30,7 @@ public class TenantNonRelationalDataManager implements TenantDataManager {
     private static final String AUTHENTICATION_SETTINGS_COLLECTION = "authentication-settings-collection";
     private static final String USER_MANAGEMENT_SETTINGS_COLLECTION = "user-management-settings-collection";
     private static final String SECURITY_SETTINGS_COLLECTION = "security-settings-collection";
+    private static final String NOTIFICATION_SETTINGS_COLLECTION = "notification-settings-collection";
     private static final String CUSTOM_SETTINGS_COLLECTION = "custom-settings-collection";
 
 
@@ -67,7 +68,7 @@ public class TenantNonRelationalDataManager implements TenantDataManager {
                 .build();
         TenantDocument savedTenantDocument = this.mongoTemplate.save(tenantDocument, TENANT_COLLECTION);
         TenantAuthenticationSettingsDocument savedTenantAuthenticationSettingsDocument = this.mongoTemplate.save(tenantAuthenticationSettingsDocument, AUTHENTICATION_SETTINGS_COLLECTION);
-        TenantNotificationSettingDocument savedTenantNotificationSettings = this.mongoTemplate.save(tenantNotificationSettingDocument, SECURITY_SETTINGS_COLLECTION);
+        TenantNotificationSettingDocument savedTenantNotificationSettings = this.mongoTemplate.save(tenantNotificationSettingDocument, NOTIFICATION_SETTINGS_COLLECTION);
         UserManagementSettingsDocument savedUserManagementSettings = this.mongoTemplate.save(userManagementSettingsDocument, USER_MANAGEMENT_SETTINGS_COLLECTION);
         return TenantInformationDTO.builder()
                 .tenantId(savedTenantDocument.getId())
@@ -81,7 +82,23 @@ public class TenantNonRelationalDataManager implements TenantDataManager {
 
     @Override
     public Optional<TenantInformationDTO> fetchTenantInformation(ResourceIdentifier tenantId) {
-        return Optional.empty();
+        String resourceDBIdentifier = tenantId.toString();
+        Optional<TenantDocument> tenantDocument = Optional.ofNullable(this.mongoTemplate.findById(resourceDBIdentifier, TenantDocument.class, TENANT_COLLECTION));
+        Optional<TenantAuthenticationSettingsDocument> tenantAuthenticationSettingsDocument = Optional.ofNullable(this.mongoTemplate.findById(ResourceIdentifier.buildChildIdentifiersFromTenantIdentifier(resourceDBIdentifier, ResourceType.AUTHENTICATION_SETTINGS).toString(), TenantAuthenticationSettingsDocument.class, AUTHENTICATION_SETTINGS_COLLECTION));
+        Optional<TenantNotificationSettingDocument> tenantNotificationSettingDocument = Optional.ofNullable(this.mongoTemplate.findById(ResourceIdentifier.buildChildIdentifiersFromTenantIdentifier(resourceDBIdentifier, ResourceType.NOTIFICATION_SETTINGS).toString(), TenantNotificationSettingDocument.class, NOTIFICATION_SETTINGS_COLLECTION));
+        Optional<UserManagementSettingsDocument> userManagementSettingsDocument = Optional.ofNullable(this.mongoTemplate.findById(ResourceIdentifier.buildChildIdentifiersFromTenantIdentifier(resourceDBIdentifier, ResourceType.USER_MANAGEMENT_SETTINGS).toString(), UserManagementSettingsDocument.class, USER_MANAGEMENT_SETTINGS_COLLECTION));
+        if(tenantDocument.isPresent() && tenantAuthenticationSettingsDocument.isPresent() && tenantNotificationSettingDocument.isPresent() && userManagementSettingsDocument.isPresent()){
+            return Optional.of(TenantInformationDTO.builder()
+                    .tenantId(tenantDocument.get().getId())
+                    .tenantName(tenantDocument.get().getTenantName())
+                    .contactInformation(tenantDocument.get().getContactInformation())
+                    .authenticationSettings(TenantAuthenticationSettings.fromEntity(tenantAuthenticationSettingsDocument.get()))
+                    .notificationSettings(NotificationSettings.fromEntity(tenantNotificationSettingDocument.get()))
+                    .userManagementSettings(UserManagementSettings.fromEntity(userManagementSettingsDocument.get()))
+                    .build());
+        }else{
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -89,6 +106,15 @@ public class TenantNonRelationalDataManager implements TenantDataManager {
         return Optional.empty();
     }
 
+    Optional<TenantDocument> fetchTenantDocument(String tenantIdentifier){
+        return Optional.ofNullable(this.mongoTemplate.findById(tenantIdentifier, TenantDocument.class, TENANT_COLLECTION));
+    }
+    Optional<TenantAuthenticationSettingsDocument> fetchTenantAuthenticationSettings(String tenantIdentifier){
+        return Optional.ofNullable(this.mongoTemplate.findById(ResourceIdentifier.buildChildIdentifiersFromTenantIdentifier(tenantIdentifier, ResourceType.AUTHENTICATION_SETTINGS).toString(), TenantAuthenticationSettingsDocument.class, AUTHENTICATION_SETTINGS_COLLECTION));
+    }
+    Optional<TenantNotificationSettingDocument> fetchTenantNotificationSettings(String tenantIdentifier){
+        return Optional.ofNullable(this.mongoTemplate.findById(ResourceIdentifier.buildChildIdentifiersFromTenantIdentifier(tenantIdentifier, ResourceType.NOTIFICATION_SETTINGS).toString(), TenantNotificationSettingDocument.class, NOTIFICATION_SETTINGS_COLLECTION));
+    }
     @Override
     public void deleteTenantIfPresent(ResourceIdentifier tenantId) {
 
