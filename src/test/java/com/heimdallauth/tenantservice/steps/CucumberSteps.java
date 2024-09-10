@@ -39,14 +39,17 @@ public class CucumberSteps {
 
     @Given("an account with valid contact information")
     public void anAccountWithValidContactInformation() {
-        requestDTO = new AccountCreationRequestDTO();
-        requestDTO.setAccountContactInformation(new TenantContactInformation("abc@google.com", "123456789", "support@google.com"));
+        requestDTO = new AccountCreationRequestDTO("test@test.com", "Testing Organization","Test Organization Administrator");
     }
 
     @Given("an account with invalid contact information")
     public void anAccountWithInvalidContactInformation() {
-        requestDTO = new AccountCreationRequestDTO();
-        requestDTO.setAccountContactInformation(new TenantContactInformation(null, null, null));
+        requestDTO = new AccountCreationRequestDTO(null, null, null);
+    }
+    @Given("the account is created successfully")
+    public void theAccountIsCreatedSuccessfully() {
+        iCreateTheAccount();
+        theAccountShouldBeCreatedSuccessfully();
     }
 
     @When("I create the account")
