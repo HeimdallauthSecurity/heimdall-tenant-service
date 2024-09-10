@@ -11,7 +11,7 @@ ENV SPRING_PROFILES_ACTIVE=container
 WORKDIR /app
 
 # Copy the JAR file from the GitHub Action artifact
-COPY --from=builder /workspace/build/libs/credential-store.jar /app/credential-store.jar
+COPY --from=builder /workspace/build/libs/tenant-service.jar /app/tenant-service.jar
 
 # Expose the port the application runs on
 EXPOSE 8080
