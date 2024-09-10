@@ -1,7 +1,9 @@
 Feature: Tenant Onboarding
 
   Scenario: Register a new tenant with required data
-    Given the system is ready to onboard a new tenant
+    Given an account with valid contact information
+    And the account is created successfully
+    And the system is ready to onboard a new tenant
     When the user provides the required data for tenant registration
       | accountId    | tenantName | contactInformation    |
       | "account123" | "Tenant A" | "contact@tenantA.com" |
