@@ -2,7 +2,6 @@ package com.heimdallauth.tenantservice.documents;
 
 import com.heimdallauth.tenantservice.constants.TenantStatus;
 import com.heimdallauth.tenantservice.models.TenantContactInformation;
-import com.heimdallauth.tenantservice.utils.ResourceIdentifier;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +18,7 @@ import java.time.Instant;
 @Data
 public class TenantDocument {
     @Id
-    private ResourceIdentifier id;
+    private String id;
     private String tenantName;
     private String tenantDescription;
     private TenantContactInformation contactInformation;

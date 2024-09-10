@@ -2,7 +2,6 @@ package com.heimdallauth.tenantservice.documents;
 
 import com.heimdallauth.tenantservice.constants.AuthenticationMethods;
 import com.heimdallauth.tenantservice.models.PasswordPolicy;
-import com.heimdallauth.tenantservice.utils.ResourceIdentifier;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,9 +19,9 @@ import java.util.List;
 @Data
 public class TenantAuthenticationSettingsDocument {
     @Id
-    private ResourceIdentifier id;
+    private String id;
     @Indexed(unique = true)
-    private ResourceIdentifier tenantId;
+    private String tenantId;
     private List<AuthenticationMethods> authenticationMethods;
     private Boolean mfaEnabled;
     private PasswordPolicy passwordPolicy;

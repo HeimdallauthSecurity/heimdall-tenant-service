@@ -1,24 +1,23 @@
 package com.heimdallauth.tenantservice.utils;
 
-public class ResourceIdentifier {
+import com.heimdallauth.tenantservice.constants.ResourceType;
+import lombok.Getter;
+
+public record ResourceIdentifier(String service, String region, String accountId, String resourceType,
+                                 @Getter String resourceId) {
     private static final String IDENTIFIER_PREFIX = "hrn";
+    private static final String PARTITION = "heimdallauth";
+    private static final String SERVICE = "tenant-service";
     private static final String DELIMITER = "::";
     private static final String RESOURCE_DELIMITER = "/";
 
-    private final String partition;
-    private final String service;
-    private final String region;
-    private final String accountId;
-    private final String resourceType;
-    private final String resourceId;
+    public static ResourceIdentifier buildTenantIdResourceIdentifier(String accountId, String region, String tenantName) {
+        return new ResourceIdentifier("tenant-service", region, accountId, ResourceType.TENANT.toString(), tenantName);
+    }
 
-    public ResourceIdentifier(String partition, String service, String region, String accountId, String resourceType, String resourceId) {
-        this.partition = partition;
-        this.service = service;
-        this.region = region;
-        this.accountId = accountId;
-        this.resourceType = resourceType;
-        this.resourceId = resourceId;
+    public static ResourceIdentifier buildChildIdentifiersFromTenantIdentifier(String tenantResourceIdentifier, ResourceType childResourceRequested) {
+        ResourceIdentifier parentResourceIdentifier = ResourceIdentifier.fromString(tenantResourceIdentifier);
+        return new ResourceIdentifier(parentResourceIdentifier.service, parentResourceIdentifier.region, parentResourceIdentifier.accountId, childResourceRequested.toString(), parentResourceIdentifier.resourceId);
     }
 
     public static ResourceIdentifier fromString(String identifier) {
@@ -32,23 +31,28 @@ public class ResourceIdentifier {
         }
 
         String[] resourceParts = parts[4].split(RESOURCE_DELIMITER);
-        if (resourceParts.length != 2) {
+        if (resourceParts.length != 3) {
             throw new IllegalArgumentException("Invalid resource format");
         }
 
-        return new ResourceIdentifier(parts[0], parts[1], parts[2],parts[3], resourceParts[0], resourceParts[1]);
+        return new ResourceIdentifier(
+                parts[2], // service
+                parts[3], // region
+                resourceParts[0], // accountId
+                resourceParts[1], // resourceType
+                resourceParts[2]  // resourceId
+        );
     }
 
     @Override
     public String toString() {
         return IDENTIFIER_PREFIX + DELIMITER +
-                partition + DELIMITER +
-                service + DELIMITER +
+                PARTITION + DELIMITER +
+                SERVICE + DELIMITER +
                 region + DELIMITER +
                 accountId + RESOURCE_DELIMITER +
                 resourceType + RESOURCE_DELIMITER +
                 resourceId;
     }
-
     // Getters and setters for each field can be added here
 }
