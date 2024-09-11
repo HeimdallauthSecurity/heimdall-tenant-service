@@ -41,7 +41,7 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
         String logMessageStackTrace = Arrays.stream(stackTrace).map(StackTraceElement::toString).collect(Collectors.joining(" | "));
         MDC.put(KEY_LOG_ID, logId);
         MDC.put("StackTrace", logMessageStackTrace);
-        log.error("Internal server error, endpoint: {}", request.getContextPath());
+        log.error("Internal server error, endpoint: {}, StackTrace={}", request.getContextPath(),logMessageStackTrace);
         MDC.clear();
         return ResponseEntity.status(500).body(new ErrorDTO(logId, "Internal server error", ex.getMessage()));
     }
