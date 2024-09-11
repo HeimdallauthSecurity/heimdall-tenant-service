@@ -36,10 +36,10 @@ public class TestDependencyConfiguration {
         return accountsNonRelationalDataManager;
     }
 
-    @Bean
-    public AccountService accountService(AccountsDataManager accountsDataManager) {
-        return new AccountService(accountsDataManager);
-    }
+//    @Bean
+//    public AccountService accountService(AccountsDataManager accountsDataManager) {
+//        return new AccountService(accountsDataManager);
+//    }
 
     @Bean
     public TenantDataManager tenantDataManager(MongoTemplate mongoTemplate) {
