@@ -26,7 +26,8 @@ public class AccountService {
         AccountDocument accountDocument = this.accountsDataManager.createAccount(
                 accountCreatePayload.requesterEmailAddress(),
                 accountCreatePayload.organizationName(),
-                accountCreatePayload.requesterFullName()
+                accountCreatePayload.firstName(),
+                accountCreatePayload.lastName()
         );
         return accountDocument.getAccountId();
     }
