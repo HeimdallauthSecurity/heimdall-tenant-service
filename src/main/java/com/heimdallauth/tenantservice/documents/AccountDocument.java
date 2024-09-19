@@ -19,7 +19,8 @@ public class AccountDocument {
     private String accountId;
     private String accountAdminEmailAddress;
     private String organizationName;
-    private String requesterFullName;
+    private String requesterFirstName;
+    private String requesterLastName;
     private Instant creationTimestamp;
     private Instant updateTimestamp;
     private Instant verificationTimestamp;

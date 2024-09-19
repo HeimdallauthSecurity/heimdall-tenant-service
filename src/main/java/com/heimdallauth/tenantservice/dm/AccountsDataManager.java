@@ -5,7 +5,7 @@ import com.heimdallauth.tenantservice.documents.AccountDocument;
 import java.util.Optional;
 
 public interface AccountsDataManager {
-    AccountDocument createAccount(String accountEmailAddress, String organizationName, String requesterFullName);
+    AccountDocument createAccount(String accountEmailAddress, String organizationName, String firstName, String lastName);
 
     Optional<AccountDocument> findAccountByAccountId(String accountId);
 

@@ -23,11 +23,12 @@ public class AccountsNonRelationalDataManager implements AccountsDataManager {
 
 
     @Override
-    public AccountDocument createAccount(String accountEmailAddress, String organizationName, String requesterFullName) {
+    public AccountDocument createAccount(String accountEmailAddress, String organizationName, String firstName, String lastName) {
         AccountDocument accountDocument = AccountDocument.builder()
                 .accountAdminEmailAddress(accountEmailAddress)
                 .organizationName(organizationName)
-                .requesterFullName(requesterFullName)
+                .requesterFirstName(firstName)
+                .requesterLastName(lastName)
                 .creationTimestamp(Instant.now())
                 .updateTimestamp(Instant.now())
                 .build();
