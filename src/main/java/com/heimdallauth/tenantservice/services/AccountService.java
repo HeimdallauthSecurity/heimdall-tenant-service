@@ -21,6 +21,7 @@ import java.time.Instant;
 @Service
 @Slf4j
 public class AccountService {
+    private static final Boolean ACCOUNT_ACTIVE = false;
     private final AccountsDataManager accountsDataManager;
     private final KratosClient kratosClient;
     private final BifrostClient bifrostClient;
@@ -77,7 +78,8 @@ public class AccountService {
                     createdAccount.getAccountAdminEmailAddress(),
                     createdAccount.getAccountAdminEmailAddress(),
                     accountCreationRequestDTO.firstName(),
-                    accountCreationRequestDTO.lastName()
+                    accountCreationRequestDTO.lastName(),
+                    ACCOUNT_ACTIVE
             );
             KratosAccountInformation kratosAccountInformation = this.kratosClient.createAdministratorUserAccount(kratosUserAccountCreationDTO);
             this.bifrostClient.sendEmail(new BifrostSendEmailRequestDTO(kratosAccountInformation.email(), MailType.PROFILE_VERIFICATION));
